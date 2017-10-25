@@ -1,0 +1,51 @@
+package com.example.bloder.hamburger.redux
+
+import android.content.Context
+import android.view.View
+import com.reduks.reduks.Action
+import com.reduks.reduks.Store
+import com.reduks.reduks.subscription.Subscriber
+import com.reduks.reduks.subscription.Subscription
+import trikita.anvil.Anvil
+import trikita.anvil.RenderableView
+import kotlin.reflect.KProperty
+
+/**
+ * Created by bloder on 25/10/17.
+ */
+abstract class ReactView<State>(environment: Context) : RenderableView(environment), Subscriber<State> {
+
+    private var store by lazy { buildStore() }
+    private var subscription = Subscription {}
+
+    abstract fun render(state: State)
+    abstract fun buildStore() : Store<State>
+
+    protected fun dispatch(action: Action<State>) {
+        store.dispatch(action)
+    }
+
+    override fun stateChanged(state: State) {
+        Anvil.render()
+    }
+
+    override fun onDetachedFromWindow() {
+        Anvil.unmount(this, false)
+        super.onDetachedFromWindow()
+    }
+
+    open fun onCreateView(state: State) : View? {
+        subscription = store.subscribe(this@ReactView)
+        return this
+    }
+
+    fun onCreateView() : View? = onCreateView(store.getState())
+    fun onResume() = onResume(store.getState())
+    fun onDestroy() = onDestroy(store.getState())
+    open fun onResume(state: State) {}
+    open fun onDestroy(state: State) = subscription.unsubscribe()
+
+    override fun view() = render(store.getState())
+
+    private operator fun <T, State> Lazy<T>.setValue(reactView: ReactView<State>, property: KProperty<*>, t: T) {}
+}
