@@ -1,6 +1,5 @@
-package com.example.bloder.hamburger
+package com.example.bloder.hamburger.hamburgers
 
-import com.example.bloder.hamburger.hamburgers.HamburgersView
 import com.example.bloder.hamburger.redux.ReactActivity
 
 /**
