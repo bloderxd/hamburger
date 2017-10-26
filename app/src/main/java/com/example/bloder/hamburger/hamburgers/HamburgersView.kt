@@ -11,9 +11,7 @@ import com.reduks.reduks.reduksStore
  */
 class HamburgersView(context: Context) : ReactView<HamburgersState>(context) {
 
-    override fun render(state: HamburgersState) {
-
-    }
+    override fun render(state: HamburgersState) {}
 
     override fun buildStore(): Store<HamburgersState> = reduksStore {}
 }
