@@ -3,6 +3,8 @@ package com.example.bloder.hamburger.redux
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 
 /**
  * Created by bloder on 25/10/17.
@@ -25,5 +27,15 @@ abstract class ReactActivity(private val viewClass: Class<*>) : AppCompatActivit
     override fun onDestroy() {
         super.onDestroy()
         view?.onDestroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        view?.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(view?.menuToInflate()?:-1, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }

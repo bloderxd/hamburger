@@ -1,6 +1,7 @@
 package com.example.bloder.hamburger.redux
 
 import android.content.Context
+import android.view.MenuItem
 import android.view.View
 import com.reduks.reduks.Action
 import com.reduks.reduks.Store
@@ -42,8 +43,11 @@ abstract class ReactView<State>(environment: Context) : RenderableView(environme
     fun onCreateView() : View? = onCreateView(store.getState())
     fun onResume() = onResume(store.getState())
     fun onDestroy() = onDestroy(store.getState())
+    fun onOptionsItemSelected(item: MenuItem?) = onOptionsItemSelected(store.getState(), item)
     open fun onResume(state: State) {}
     open fun onDestroy(state: State) = subscription.unsubscribe()
+    open fun onOptionsItemSelected(state: State, item: MenuItem?) {}
+    open fun menuToInflate() : Int = -1
 
     override fun view() = render(store.getState())
 
