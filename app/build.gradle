@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
@@ -17,6 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
 }
 
 dependencies {
@@ -28,6 +39,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:26.+"
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.reduks:reduks:0.1.2'
     compile 'co.trikita:anvil-sdk15:0.5.0'
     compile "io.reactivex.rxjava2:rxjava:2.1.4"
@@ -37,5 +49,10 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile "org.jetbrains.spek:spek-api:1.0.89"
     testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.5.2'
+    testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M2'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile "org.jetbrains.spek:spek-junit-platform-engine:1.0.89"
 }
