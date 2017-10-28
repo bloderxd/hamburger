@@ -1,0 +1,20 @@
+package com.example.bloder.hamburger.repository
+
+import com.example.bloder.hamburger.api.models.Hamburger
+import com.example.bloder.hamburger.api.models.Ingredient
+import com.example.bloder.hamburger.repository.local.LocalRepository
+import com.example.bloder.hamburger.repository.online.ProductionRepository
+import io.reactivex.Single
+
+/**
+ * Created by bloder on 28/10/17.
+ */
+interface HamburgerRepository {
+
+    fun get(type: REPOSITORY_ENVIRONMENT) : HamburgerRepository = type.reference
+
+    fun getHamburgers() : Single<List<Hamburger>>
+    fun getIngredients() : Single<List<Ingredient>>
+}
+
+enum class REPOSITORY_ENVIRONMENT(val reference: HamburgerRepository) { PROD(ProductionRepository()), LOCAL(LocalRepository()) }
