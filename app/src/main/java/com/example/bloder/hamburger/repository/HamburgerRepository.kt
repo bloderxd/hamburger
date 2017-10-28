@@ -11,7 +11,9 @@ import io.reactivex.Single
  */
 interface HamburgerRepository {
 
-    fun get(type: REPOSITORY_ENVIRONMENT) : HamburgerRepository = type.reference
+    companion object {
+        fun get(type: REPOSITORY_ENVIRONMENT): HamburgerRepository = type.reference
+    }
 
     fun getHamburgers() : Single<List<Hamburger>>
     fun getIngredients() : Single<List<Ingredient>>
