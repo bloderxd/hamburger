@@ -35,7 +35,7 @@ abstract class ReactView<State>(environment: Context) : RenderableView(environme
         super.onDetachedFromWindow()
     }
 
-    open fun onCreateView(state: State) : View? {
+    private fun onCreateView(state: State) : View? {
         subscription = store.subscribe(this@ReactView)
         return this
     }
