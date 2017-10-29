@@ -1,7 +1,6 @@
 package com.example.bloder.hamburger.hamburgers
 
 import android.content.Context
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
@@ -26,31 +25,31 @@ class HamburgersView(private val activity: Context) : ReactView<HamburgersState>
     override fun render(state: HamburgersState) {
         xml(R.layout.activity_hamburgers) {
 
-            withId(R.id.refresh) {
-                val view = Anvil.currentView<SwipeRefreshLayout>()
-                view.setOnRefreshListener {
-                    dispatch(HamburgersAction.FetchHamburgers)
-                }
+            withId(R.id.progress) {
+                visibility(state.hamburgers.isEmpty())
             }
 
             withId(R.id.hamburgers) {
                 val view = Anvil.currentView<RecyclerView>()
-                val adapter = if (view.adapter == null) HamburgersAdapter(activity, state.hamburgers) else view.adapter
+                val adapter = if (view.adapter == null && state.hamburgers.isNotEmpty()) HamburgersAdapter(activity, state.hamburgers, state.ingredients) else view.adapter
                 view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                 view.adapter = adapter
             }
 
-            withId(R.id.cart) {
-                onClick {}
-            }
+            if (state.hamburgers.isEmpty() && state.ingredients.isEmpty()) fetchFood()
         }
+    }
+
+    private fun fetchFood() = repository.getIngredients().subscribe { ingredients, _ ->
+        dispatch(HamburgersAction.IngredientsFetched(ingredients))
+        dispatch(HamburgersAction.FetchHamburgers)
     }
 
     private fun fetchHamburgers() = repository.getHamburgers().subscribe { hamburgers, _ ->
         dispatch(HamburgersAction.HamburgersFetched(hamburgers))
     }
 
-    private fun fetchIngredients() = repository.getIngredients().subscribe { ingredients, _ ->
+    private fun fetchIngredients() = repository.getIngredients().subscribe { ingredients ->
         dispatch(HamburgersAction.IngredientsFetched(ingredients))
     }
 

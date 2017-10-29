@@ -12,7 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "HAMBURGER_ENDPOINT", "\"http://10.2.2:8080/\""
+        buildConfigField "String", "HAMBURGER_ENDPOINT", "\"http://192.168.0.19:8080/\""
     }
     buildTypes {
         release {
@@ -28,6 +28,7 @@ android {
 
 repositories {
     jcenter()
+    mavenCentral()
     maven { url "http://dl.bintray.com/jetbrains/spek" }
 }
 
@@ -43,6 +44,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.reduks:reduks:0.1.2'
     compile 'co.trikita:anvil-sdk15:0.5.0'
+    compile 'co.trikita:anvil-design:0.5.0'
+    compile 'co.trikita:anvil-support-v4:0.5.0'
     compile "io.reactivex.rxjava2:rxjava:2.1.4"
     compile "io.reactivex.rxjava2:rxkotlin:2.1.0"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
@@ -51,6 +54,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile "org.jetbrains.spek:spek-api:1.0.89"
+    compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M2'

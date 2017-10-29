@@ -3,8 +3,10 @@ package com.example.bloder.hamburger.redux
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 
 /**
  * Created by bloder on 25/10/17.
