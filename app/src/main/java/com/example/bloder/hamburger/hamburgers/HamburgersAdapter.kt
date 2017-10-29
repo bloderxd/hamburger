@@ -27,6 +27,7 @@ class HamburgersAdapter(private val context: Context, private val hamburgers: Li
     class ViewHolder(private val context: Context) : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.hamburger_view_holder, null)) {
 
         fun bind(hamburger: Hamburger, ingredients: List<Ingredient> = listOf()) {
+            itemView.setOnClickListener {  }
             itemView.findViewById<TextView>(R.id.name).text = hamburger.name
             itemView.findViewById<TextView>(R.id.ingredients).text = findAllIngredientsIn(hamburger.ingredients, ingredients)
             itemView.findViewById<TextView>(R.id.price).text = buildPrice(getHamburgerTotal(hamburger.ingredients, ingredients))
