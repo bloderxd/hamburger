@@ -12,5 +12,8 @@ data class HamburgerPayload(
         @SerializedName("ingredients") private val ingredients: List<Int> = listOf(),
         @SerializedName("image") private val image: String = ""
 ) {
-    fun toModel() : Hamburger = Hamburger(id, name, ingredients, image)
+    fun toModel() : Hamburger = Hamburger(id, name, ingredients, getCorrectImageUrl(image))
+
+    //This is a handling to back end shortened image url's protocol with Picasso
+    private fun getCorrectImageUrl(oldUrl: String) : String = if (oldUrl.contains("https")) oldUrl.replace("https", "http") else oldUrl
 }

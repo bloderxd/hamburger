@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.example.bloder.hamburger.R
+import com.example.bloder.hamburger.api.models.Hamburger
+import com.example.bloder.hamburger.hamburger_details.HamburgerDetailsActivity
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersAction
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersState
 import com.example.bloder.hamburger.redux.ReactView
@@ -14,6 +16,7 @@ import com.reduks.reduks.Store
 import com.reduks.reduks.reduksStore
 import trikita.anvil.Anvil
 import trikita.anvil.DSL.*
+import java.io.Serializable
 
 /**
  * Created by bloder on 25/10/17.
@@ -31,7 +34,7 @@ class HamburgersView(private val activity: Context) : ReactView<HamburgersState>
 
             withId(R.id.hamburgers) {
                 val view = Anvil.currentView<RecyclerView>()
-                val adapter = if (view.adapter == null && state.hamburgers.isNotEmpty()) HamburgersAdapter(activity, state.hamburgers, state.ingredients) else view.adapter
+                val adapter = if (view.adapter == null && state.hamburgers.isNotEmpty()) HamburgersAdapter(activity, state.hamburgers, state.ingredients, { hamburger -> startActivity(hamburger, state) }) else view.adapter
                 view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                 view.adapter = adapter
             }
@@ -51,6 +54,13 @@ class HamburgersView(private val activity: Context) : ReactView<HamburgersState>
 
     private fun fetchIngredients() = repository.getIngredients().subscribe { ingredients ->
         dispatch(HamburgersAction.IngredientsFetched(ingredients))
+    }
+
+    private fun startActivity(hamburger: Hamburger, state: HamburgersState) {
+        startActivity(HamburgerDetailsActivity::class.java) {
+            withExtra("detail", hamburger)
+            withExtra("ingredients", state.ingredients as? ArrayList<Serializable>)
+        }
     }
 
     override fun onOptionsItemSelected(state: HamburgersState, item: MenuItem?) {

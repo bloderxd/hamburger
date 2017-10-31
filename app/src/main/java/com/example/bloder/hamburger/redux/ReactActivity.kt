@@ -3,10 +3,8 @@ package com.example.bloder.hamburger.redux
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 
 /**
  * Created by bloder on 25/10/17.
@@ -18,6 +16,7 @@ abstract class ReactActivity(private val viewClass: Class<*>) : AppCompatActivit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = try { viewClass.getConstructor(Context::class.java).newInstance(this) as ReactView<State> } catch (e: Exception) { throw Exception("View class need to be a ReactView extension") }
+        view?.onCreate()
         setContentView(view?.onCreateView())
     }
 
