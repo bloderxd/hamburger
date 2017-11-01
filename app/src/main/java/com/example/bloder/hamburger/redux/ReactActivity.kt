@@ -16,8 +16,8 @@ abstract class ReactActivity(private val viewClass: Class<*>) : AppCompatActivit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = try { viewClass.getConstructor(Context::class.java).newInstance(this) as ReactView<State> } catch (e: Exception) { throw Exception("View class need to be a ReactView extension") }
-        view?.onCreate()
         setContentView(view?.onCreateView())
+        view?.onCreate()
     }
 
     override fun onResume() {
@@ -36,7 +36,7 @@ abstract class ReactActivity(private val viewClass: Class<*>) : AppCompatActivit
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(view?.menuToInflate()?:-1, menu)
+        if (view?.menuToInflate() != null && view?.menuToInflate()!! > -1) menuInflater.inflate(view?.menuToInflate()?:-1, menu)
         return super.onCreateOptionsMenu(menu)
     }
 }

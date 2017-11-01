@@ -1,6 +1,9 @@
 package com.example.bloder.hamburger.hamburger_details
 
 import android.app.Activity
+import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
 import com.example.bloder.hamburger.R
 import com.example.bloder.hamburger.api.models.Hamburger
@@ -18,7 +21,7 @@ import java.text.DecimalFormat
 /**
  * Created by bloder on 30/10/17.
  */
-class HamburgerDetailsView(private val activity: Activity) : ReactView<HamburgerDetailsState>(activity) {
+class HamburgerDetailsView(private val activity: Context) : ReactView<HamburgerDetailsState>(activity) {
 
     private val ingredientsInfo by lazy { extras()?.getSerializable("ingredients") as List<Ingredient> }
 
@@ -31,7 +34,20 @@ class HamburgerDetailsView(private val activity: Activity) : ReactView<Hamburger
             withId(R.id.image) { Picasso.with(activity).load(state.hamburger.image).into(Anvil.currentView<ImageView>()) }
             withId(R.id.name) { text(state.hamburger.name) }
             withId(R.id.total) { text(buildPrice(getHamburgerTotal(state.hamburger.ingredients, ingredientsInfo))) }
+            withId(R.id.ingredients) {
+                val view = Anvil.currentView<RecyclerView>()
+                view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                view.adapter = IngredientsDetailsAdapter(activity, convertHamburgerIngredients(state.hamburger.ingredients))
+            }
         }
+    }
+
+    private fun convertHamburgerIngredients(ids: List<Int>) : List<Ingredient> {
+        val ingredients = mutableListOf<Ingredient>()
+        ingredientsInfo.forEach { ingredient ->
+            ids.filter { ingredient.id == it }.forEach { ingredients.add(ingredient) }
+        }
+        return ingredients
     }
 
     private fun getHamburgerTotal(hamburgerIngredients: List<Int>, ingredients: List<Ingredient>) : Double {
