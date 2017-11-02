@@ -32,7 +32,7 @@ class LightOfferTest : Spek({
                     Ingredient(0, "Queijo", 1.0, "")
             )
             assertTrue {
-                LightCalculator().getTotal(ingredients, 0.0) == 0.0 && LightCalculator().getTotal(lightOfferIngredients, 9.0) == 9.0
+                LightCalculator().getTotal(ingredients, 0.0) == 1.0 && LightCalculator().getTotal(lightOfferIngredients, 9.0) == 9.0
             }
         }
     }

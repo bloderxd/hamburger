@@ -59,7 +59,7 @@ class OfferTest : Spek({
             assertTrue { ingredients.getTotalPrice() == 8.0 }
         }
 
-        it("Should return a price in light cheese offer") {
+        it("Should return a price in light offer") {
             val ingredients = listOf(
                     Ingredient(0, "Hamburguer de Carne", 1.0, ""),
                     Ingredient(0, "Hamburguer de Carne", 1.0, ""),
