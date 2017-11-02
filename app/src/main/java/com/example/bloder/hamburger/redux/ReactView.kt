@@ -3,6 +3,7 @@ package com.example.bloder.hamburger.redux
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
@@ -51,6 +52,7 @@ abstract class ReactView<State>(private val environment: Context) : RenderableVi
     }
 
     protected fun extras() : Bundle? = activity?.intent?.extras
+    protected fun fragmentManager() : FragmentManager? = activity?.supportFragmentManager
     fun onResume() = onResume(store.getState())
     fun onDestroy() = onDestroy(store.getState())
     fun onOptionsItemSelected(item: MenuItem?) = onOptionsItemSelected(store.getState(), item)
