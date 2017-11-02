@@ -1,6 +1,7 @@
 package com.example.bloder.hamburger.hamburger_details.offers
 
 import com.example.bloder.hamburger.api.models.Ingredient
+import com.example.bloder.hamburger.hamburger_details.offers.calculators.LightCalculator
 
 /**
  * Created by bloder on 01/11/17.
@@ -16,7 +17,7 @@ abstract class OfferCalculator {
         var total = 0.0
         var index = 0
         returnIngredientListFromOffer(ingredients, offer).forEach {
-            if (index <= qtd) {
+            if (index < qtd) {
                 if (exception != null && exception.title.trim().toLowerCase() == it.name.trim().toLowerCase()) {
                     total = total
                 } else {
@@ -32,7 +33,7 @@ abstract class OfferCalculator {
         val list = mutableListOf<Ingredient>()
         ingredients.forEach { ingredient ->
             INGREDIENT_OFFER_TYPE.filterByOffer(offer)
-                    .filter { it.name.trim().toLowerCase() == ingredient.name.trim().toLowerCase() }
+                    .filter { it.title.trim().toLowerCase() == ingredient.name.trim().toLowerCase() }
                     .forEach { list.add(ingredient) }
         }
         return list
@@ -66,6 +67,9 @@ abstract class OfferCalculator {
 
 fun List<Ingredient>.getTotalPrice() : Double {
     var total = 0.0
-    OFFER.values().forEach { total += it.calculator.getTotal(this, total) }
+    OFFER.values().forEach {
+        if (it.calculator is LightCalculator) total = it.calculator.getTotal(this, total)
+        else total += it.calculator.getTotal(this, total)
+    }
     return total
 }

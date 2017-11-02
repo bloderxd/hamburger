@@ -8,6 +8,7 @@ import android.widget.ImageView
 import com.example.bloder.hamburger.R
 import com.example.bloder.hamburger.api.models.Hamburger
 import com.example.bloder.hamburger.api.models.Ingredient
+import com.example.bloder.hamburger.hamburger_details.offers.getTotalPrice
 import com.example.bloder.hamburger.hamburger_details.redux.HamburgerDetailsAction
 import com.example.bloder.hamburger.hamburger_details.redux.HamburgerDetailsState
 import com.example.bloder.hamburger.redux.ReactView
@@ -31,14 +32,17 @@ class HamburgerDetailsView(private val activity: Context) : ReactView<HamburgerD
 
     override fun render(state: HamburgerDetailsState) {
         xml(R.layout.activity_hamburger_details) {
+            val adapter =
+                    if ((withId(R.id.ingredients){} as RecyclerView).adapter == null) IngredientsDetailsAdapter(activity, convertHamburgerIngredients(state.hamburger.ingredients))
+                    else (withId(R.id.ingredients){} as RecyclerView).adapter as IngredientsDetailsAdapter
             withId(R.id.image) { Picasso.with(activity).load(state.hamburger.image).into(Anvil.currentView<ImageView>()) }
             withId(R.id.name) { text(state.hamburger.name) }
-            withId(R.id.total) { text(buildPrice(getHamburgerTotal(state.hamburger.ingredients, ingredientsInfo))) }
             withId(R.id.ingredients) {
                 val view = Anvil.currentView<RecyclerView>()
                 view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                view.adapter = IngredientsDetailsAdapter(activity, convertHamburgerIngredients(state.hamburger.ingredients))
+                view.adapter = adapter
             }
+            withId(R.id.total) { text(buildPrice(adapter.getAllIngredients().getTotalPrice())) }
         }
     }
 

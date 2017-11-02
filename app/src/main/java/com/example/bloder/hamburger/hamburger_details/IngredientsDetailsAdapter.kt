@@ -18,6 +18,12 @@ class IngredientsDetailsAdapter(private val context: Context, private val hambur
 
     init { ingredientGroups = buildIngredientGroups() }
 
+    fun getAllIngredients() : List<Ingredient> {
+        val ingredients = mutableListOf<Ingredient>()
+        ingredientGroups.forEach { ingredients.addAll(it.ingredients) }
+        return ingredients
+    }
+
     private fun buildIngredientGroups() : MutableList<IngredientGroup> {
         val groups = mutableListOf<IngredientGroup>()
         hamburgerIngredients.forEach { hamburgerIngredient ->

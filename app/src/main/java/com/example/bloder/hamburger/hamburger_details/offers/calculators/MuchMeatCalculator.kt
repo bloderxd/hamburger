@@ -12,7 +12,7 @@ class MuchMeatCalculator : OfferCalculator() {
     override fun getTotal(ingredients: List<Ingredient>, partialPrice: Double): Double {
         var total = 0.0
         if (ingredients.meatCount() > 0 && !isLightOffer(ingredients)) total += ingredients.getMeatsTotal(totalItemsPaid(ingredients.meatCount()))
-        if (ingredients.meatCount(INGREDIENT_OFFER_TYPE.BACON) > 0 && isLightOffer(ingredients)) total += ingredients.getMeatsTotal(totalItemsPaid(ingredients.meatCount(INGREDIENT_OFFER_TYPE.BACON)), INGREDIENT_OFFER_TYPE.BACON)
+        else if (ingredients.meatCount(INGREDIENT_OFFER_TYPE.BACON) > 0 && isLightOffer(ingredients)) total += ingredients.getMeatsTotal(totalItemsPaid(ingredients.meatCount(INGREDIENT_OFFER_TYPE.BACON)), INGREDIENT_OFFER_TYPE.BACON)
         return total
     }
 
