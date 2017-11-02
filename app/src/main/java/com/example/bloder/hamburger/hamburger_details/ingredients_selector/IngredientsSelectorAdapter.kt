@@ -46,9 +46,10 @@ class IngredientsSelectorAdapter(private val context: Context,
                 ingredientsGrouped.add(IngredientsDetailsAdapter.IngredientGroup(ingredient.id, mutableListOf(ingredient)))
                 return ingredientsGrouped
             }
+            val index = ingredientsGrouped.indexOf(group)
             ingredientsGrouped.remove(group)
             group.ingredients.add(group.ingredients[0])
-            ingredientsGrouped.add(group)
+            ingredientsGrouped.add(index, group)
             return ingredientsGrouped
         }
 
@@ -58,9 +59,10 @@ class IngredientsSelectorAdapter(private val context: Context,
                 ingredientsGrouped.remove(group)
                 return ingredientsGrouped
             } else {
+                val index = ingredientsGrouped.indexOf(group)
                 ingredientsGrouped.remove(group)
                 group.ingredients.removeAt(0)
-                ingredientsGrouped.add(group)
+                ingredientsGrouped.add(index, group)
                 return ingredientsGrouped
             }
         }
