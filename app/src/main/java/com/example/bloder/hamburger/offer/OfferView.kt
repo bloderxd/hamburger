@@ -13,8 +13,7 @@ import com.example.bloder.hamburger.repository.REPOSITORY_ENVIRONMENT
 import com.reduks.reduks.Store
 import com.reduks.reduks.reduksStore
 import trikita.anvil.Anvil
-import trikita.anvil.DSL.withId
-import trikita.anvil.DSL.xml
+import trikita.anvil.DSL.*
 
 /**
  * Created by bloder on 02/11/17.
@@ -24,25 +23,21 @@ class OfferView(private val activity: Context) : ReactView<OfferState>(activity)
     private val repository by lazy { HamburgerRepository.get(REPOSITORY_ENVIRONMENT.PROD) }
     private var error = false
 
-    override fun onCreate(state: OfferState) {
-        dispatch(OfferActions.FetchOffers({ fetchOffers() }))
-    }
-
     override fun render(state: OfferState) {
-        xml(R.layout.activity_offer) {
+        if (state.offers.isEmpty()) fetchOffers()
+        if (state.offers.isNotEmpty()) {
+            xml(R.layout.activity_offer) {
 
-            withId(R.id.progress) {
-                visibility = if (state.offers.isEmpty()) View.VISIBLE else View.GONE
-            }
+                withId(R.id.progress_offer) {
+                    visibility(state.offers.isEmpty())
+                }
 
-            withId(R.id.offers) {
-                val view = Anvil.currentView<RecyclerView>()
-                view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                view.adapter = OfferAdapter(activity, state.offers)
-            }
-
-            withId(R.id.error_message) {
-                visibility = if (state.offers.isEmpty() && error) View.VISIBLE else View.GONE
+                withId(R.id.offers) {
+                    visibility(state.offers.isNotEmpty())
+                    val view = Anvil.currentView<RecyclerView>()
+                    view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                    view.adapter = OfferAdapter(activity, state.offers)
+                }
             }
         }
     }
