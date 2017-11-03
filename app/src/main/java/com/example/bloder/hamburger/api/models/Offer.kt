@@ -5,5 +5,6 @@ package com.example.bloder.hamburger.api.models
  */
 data class Offer(
         val id: Int,
+        val name: String,
         val description: String
 )

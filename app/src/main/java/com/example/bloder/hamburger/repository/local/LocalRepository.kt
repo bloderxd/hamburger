@@ -3,6 +3,7 @@ package com.example.bloder.hamburger.repository.local
 import com.example.bloder.hamburger.api.models.Cart
 import com.example.bloder.hamburger.api.models.Hamburger
 import com.example.bloder.hamburger.api.models.Ingredient
+import com.example.bloder.hamburger.api.models.Offer
 import com.example.bloder.hamburger.repository.HamburgerRepository
 import io.reactivex.Single
 
@@ -10,6 +11,12 @@ import io.reactivex.Single
  * Created by bloder on 28/10/17.
  */
 class LocalRepository : HamburgerRepository {
+
+    override fun getOffers(): Single<List<Offer>> = Single.just(
+            listOf(
+                    Offer(1, "Light", "Test")
+            )
+    )
 
     override fun getCart(): Single<List<Cart>> = Single.just(
             listOf(

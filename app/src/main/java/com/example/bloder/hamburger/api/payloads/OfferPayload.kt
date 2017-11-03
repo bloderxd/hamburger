@@ -8,7 +8,8 @@ import com.google.gson.annotations.SerializedName
  */
 data class OfferPayload(
         @SerializedName("id") private val id: Int = -1,
+        @SerializedName("name") private val name: String = "",
         @SerializedName("description") private val description: String = ""
 ) {
-    fun toModel() : Offer = Offer(id, description)
+    fun toModel() : Offer = Offer(id, name, description)
 }

@@ -10,6 +10,7 @@ import com.example.bloder.hamburger.cart.CartDialog
 import com.example.bloder.hamburger.hamburger_details.HamburgerDetailsActivity
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersAction
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersState
+import com.example.bloder.hamburger.offer.OfferActivity
 import com.example.bloder.hamburger.redux.ReactView
 import com.example.bloder.hamburger.repository.HamburgerRepository
 import com.example.bloder.hamburger.repository.REPOSITORY_ENVIRONMENT
@@ -75,7 +76,9 @@ class HamburgersView(private val activity: Context) : ReactView<HamburgersState>
     override fun onOptionsItemSelected(state: HamburgersState, item: MenuItem?) {
         val id = item?.itemId
         when(id) {
-            R.id.promo -> {}
+            R.id.promo -> {
+                startActivity(OfferActivity::class.java)
+            }
         }
     }
 
