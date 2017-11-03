@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.example.bloder.hamburger.R
 import com.example.bloder.hamburger.api.models.Hamburger
+import com.example.bloder.hamburger.cart.CartDialog
 import com.example.bloder.hamburger.hamburger_details.HamburgerDetailsActivity
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersAction
 import com.example.bloder.hamburger.hamburgers.redux.HamburgersState
@@ -39,8 +40,16 @@ class HamburgersView(private val activity: Context) : ReactView<HamburgersState>
                 view.adapter = adapter
             }
 
+            withId(R.id.cart) {
+                onClick { openCartDialog(state) }
+            }
+
             if (state.hamburgers.isEmpty() && state.ingredients.isEmpty()) fetchFood()
         }
+    }
+
+    private fun openCartDialog(state: HamburgersState) {
+        CartDialog(state.hamburgers).show(fragmentManager(), "")
     }
 
     private fun fetchFood() = repository.getIngredients().subscribe { ingredients, _ ->

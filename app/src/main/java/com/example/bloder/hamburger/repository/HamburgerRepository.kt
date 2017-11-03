@@ -1,5 +1,6 @@
 package com.example.bloder.hamburger.repository
 
+import com.example.bloder.hamburger.api.models.Cart
 import com.example.bloder.hamburger.api.models.Hamburger
 import com.example.bloder.hamburger.api.models.Ingredient
 import com.example.bloder.hamburger.repository.local.LocalRepository
@@ -17,6 +18,9 @@ interface HamburgerRepository {
 
     fun getHamburgers() : Single<List<Hamburger>>
     fun getIngredients() : Single<List<Ingredient>>
+    fun getCart() : Single<List<Cart>>
+    fun addToCart(id: Int) : Single<Cart>
+    fun addToCart(id: Int, extras: List<Int>) : Single<Cart>
 }
 
 enum class REPOSITORY_ENVIRONMENT(val reference: HamburgerRepository) { PROD(ProductionRepository()), LOCAL(LocalRepository()) }

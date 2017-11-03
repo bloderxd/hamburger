@@ -1,5 +1,6 @@
 package com.example.bloder.hamburger.hamburger_details
 
+import android.app.AlertDialog
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,8 @@ import com.example.bloder.hamburger.hamburger_details.offers.getTotalPrice
 import com.example.bloder.hamburger.hamburger_details.redux.HamburgerDetailsAction
 import com.example.bloder.hamburger.hamburger_details.redux.HamburgerDetailsState
 import com.example.bloder.hamburger.redux.ReactView
+import com.example.bloder.hamburger.repository.HamburgerRepository
+import com.example.bloder.hamburger.repository.REPOSITORY_ENVIRONMENT
 import com.reduks.reduks.Store
 import com.reduks.reduks.reduksStore
 import com.squareup.picasso.Picasso
@@ -25,6 +28,7 @@ import java.text.DecimalFormat
 class HamburgerDetailsView(private val activity: Context) : ReactView<HamburgerDetailsState>(activity) {
 
     private val ingredientsInfo by lazy { extras()?.getSerializable("ingredients") as List<Ingredient> }
+    private val repository      by lazy { HamburgerRepository.get(REPOSITORY_ENVIRONMENT.PROD) }
     private var firstIngredientLists: List<Ingredient> = listOf()
 
     override fun onCreate(state: HamburgerDetailsState) {
@@ -52,14 +56,60 @@ class HamburgerDetailsView(private val activity: Context) : ReactView<HamburgerD
             withId(R.id.ingredients) {
                 val view = Anvil.currentView<RecyclerView>()
                 view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                view.adapter = adapter
+                view.adapter = if (view.adapter == null) adapter else view.adapter
             }
 
             withId(R.id.total) { text(buildPrice(
                     if (state.ingredients.isEmpty()) adapter.getAllIngredients().getTotalPrice()
                     else state.ingredients.getTotalPrice()
             ))}
+
+            withId(R.id.confirm) {
+                onClick { book(state) }
+            }
         }
+    }
+
+    private fun book(state: HamburgerDetailsState) {
+        if (state.ingredients.isEmpty() || arrayOf(state.ingredients) contentEquals arrayOf(firstIngredientLists)) normalBook(state)
+        else bookWithExtraIngredients(state)
+    }
+
+    private fun normalBook(state: HamburgerDetailsState) = repository.addToCart(state.hamburger.id).subscribe { _, error ->
+        treatResponse(error)
+    }
+
+    private fun bookWithExtraIngredients(state: HamburgerDetailsState) = repository.addToCart(state.hamburger.id, getExtrasIngredients(state.ingredients)).subscribe { _, error ->
+        treatResponse(error)
+    }
+
+    private fun treatResponse(error: Throwable?) {
+        when (error) {
+            null -> {
+                AlertDialog.Builder(activity)
+                        .setTitle("Sucesso!")
+                        .setMessage("O pedido foi inserido no carrinho.")
+                        .setPositiveButton("Ok", { dialog, _ -> dialog.dismiss(); finish() })
+                        .show()
+            }
+            else -> AlertDialog.Builder(activity)
+                    .setTitle("Ops!")
+                    .setMessage("Ocorreu um problema ao inserir sua compra ao carrinho.")
+                    .setPositiveButton("Ok", { dialog, _ -> dialog.dismiss() })
+                    .show()
+        }
+    }
+
+    private fun getExtrasIngredients(ingredients: List<Ingredient>) : List<Int> {
+        val list = mutableListOf<Int>()
+        ingredients.forEach { (id) ->
+            var countId = 0
+            ingredients.forEach {
+                if (id == it.id) countId++
+            }
+            if (countId > 1) list.add(id)
+        }
+        return list
     }
 
     private fun convertHamburgerIngredients(state: HamburgerDetailsState) : List<Ingredient> {

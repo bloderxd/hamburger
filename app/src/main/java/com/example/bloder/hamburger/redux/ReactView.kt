@@ -53,6 +53,7 @@ abstract class ReactView<State>(private val environment: Context) : RenderableVi
 
     protected fun extras() : Bundle? = activity?.intent?.extras
     protected fun fragmentManager() : FragmentManager? = activity?.supportFragmentManager
+    protected fun finish() = activity?.finish()
     fun onResume() = onResume(store.getState())
     fun onDestroy() = onDestroy(store.getState())
     fun onOptionsItemSelected(item: MenuItem?) = onOptionsItemSelected(store.getState(), item)
